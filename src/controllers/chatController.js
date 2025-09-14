@@ -115,7 +115,7 @@ function handleMessage(sender_psid, received_message) {
   }
 
   // Send the response message
-  callSendAPI(senderPsid, response);
+  callSendAPI(sender_psid, response);
 }
 
 // Handles messaging_postbacks events
@@ -132,7 +132,7 @@ let response;
     response = { 'text': 'Oops, try sending another image.' };
   }
   // Send the message to acknowledge the postback
-  callSendAPI(senderPsid, response);
+  callSendAPI(sender_psid, response);
 }
 
 // Sends response messages via the Send API
@@ -144,7 +144,7 @@ function callSendAPI(sender_psid, response) {
   // Construct the message body
   let requestBody = {
     'recipient': {
-      'id': senderPsid
+      'id': sender_psid
     },
     'message': response
   };
