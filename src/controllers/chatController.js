@@ -4,7 +4,7 @@ import request from 'request';
 
 const VERIFY_TOKEN = process.env.MY_VERIFY_TOKEN;
 
-let test = (req, res) => {
+let messaging = (req, res) => {
   return res.send("hello");
 }
 
@@ -81,7 +81,24 @@ function handleMessage(sender_psid, received_message) {
     // Create the payload for a basic text message, which
     // will be added to the body of your request to the Send API
     response = {
-      'text': `You sent the message: '${received_message.text}'. Now send me an attachment!`
+      'text': `¡Hola!, ¿Cómo pouedo ayudarte?`,
+      'payload': {
+          'template_type': 'generic',
+          'elements': [{
+            'buttons': [
+              {
+                'type': 'postback',
+                'title': 'Quiero ver tus productos',
+                'payload': 'see_products',
+              },
+              {
+                'type': 'postback',
+                'title': 'Quiero saber más de ustedes',
+                'payload': 'about_us',
+              }
+            ],
+          }]
+        }
     };
   } else if (received_message.attachments) {
 
@@ -131,6 +148,14 @@ let response;
   } else if (payload === 'no') {
     response = { 'text': 'Oops, try sending another image.' };
   }
+
+  if (payload === 'see_products') {
+    response = { 'text': 'You can see our products here: https://example.com/products' };
+  }
+  if (payload === 'about_us') {
+    response = { 'text': 'We are a company that values quality and customer satisfaction. Learn more about us at https://example.com/about' };
+  }
+  
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
 }
@@ -164,8 +189,9 @@ function callSendAPI(sender_psid, response) {
   });
 }
 
+
 module.exports = {
-  test: test,
+  messaging: messaging,
   getWebhook: getWebhook,
   postWebhook: postWebhook
 }
