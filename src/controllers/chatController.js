@@ -146,7 +146,7 @@ function handlePostback(sender_psid, received_postback) {
       response = {"text": "Aquí tienes nuestro catálogo: https://ejemplo.com/productos"};
       break;
     case 'about_us':
-      response = {"text": "Somos una empresa dedicada a... Visita: https://ejemplo.com/nosotros"};
+      response = {"text": "Puedes visitar nuestra pagina web: https://ejemplo.com/nosotros"};
       break;
     case 'yes':
       response = {"text": "¡Genial! ¿En qué más puedo ayudarte?"};
