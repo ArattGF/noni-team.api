@@ -82,6 +82,8 @@ function handleMessage(sender_psid, received_message) {
     // will be added to the body of your request to the Send API
     response = {
       'text': `¡Hola!, ¿Cómo pouedo ayudarte?`,
+      'attachment': {
+        'type': 'template',
       'payload': {
           'template_type': 'generic',
           'elements': [{
@@ -99,6 +101,7 @@ function handleMessage(sender_psid, received_message) {
             ],
           }]
         }
+      }
     };
   } else if (received_message.attachments) {
 
@@ -155,7 +158,7 @@ let response;
   if (payload === 'about_us') {
     response = { 'text': 'We are a company that values quality and customer satisfaction. Learn more about us at https://example.com/about' };
   }
-  
+
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
 }
