@@ -71,32 +71,31 @@ let postWebhook = (req, res) => {
 
 }
 
-
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
   let response;
 
-  // Checks if the message contains text
+  // Check if the message contains text
   if (received_message.text) {
-    // Create the payload for a basic text message, which
-    // will be added to the body of your request to the Send API
+    // Create response for text message
     response = {
-      'text': `¡Hola!, ¿Cómo pouedo ayudarte?`,
-      'attachment': {
-        'type': 'template',
-      'payload': {
-          'template_type': 'generic',
-          'elements': [{
-            'buttons': [
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": [{
+            "title": "¡Hola! ¿En qué puedo ayudarte?",
+            "subtitle": "Selecciona una opción:",
+            "buttons": [
               {
-                'type': 'postback',
-                'title': 'Quiero ver tus productos',
-                'payload': 'see_products',
+                "type": "postback",
+                "title": "Quiero ver tus productos",
+                "payload": "see_products",
               },
               {
-                'type': 'postback',
-                'title': 'Quiero saber más de ustedes',
-                'payload': 'about_us',
+                "type": "postback",
+                "title": "Quiero saber más de ustedes",
+                "payload": "about_us",
               }
             ],
           }]
@@ -104,28 +103,27 @@ function handleMessage(sender_psid, received_message) {
       }
     };
   } else if (received_message.attachments) {
-
-    // Get the URL of the message attachment
+    // Handle image attachment
     let attachmentUrl = received_message.attachments[0].payload.url;
     response = {
-      'attachment': {
-        'type': 'template',
-        'payload': {
-          'template_type': 'generic',
-          'elements': [{
-            'title': 'Is this the right picture?',
-            'subtitle': 'Tap a button to answer.',
-            'image_url': attachmentUrl,
-            'buttons': [
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "generic",
+          "elements": [{
+            "title": "¿Es esta la imagen correcta?",
+            "subtitle": "Selecciona una opción:",
+            "image_url": attachmentUrl,
+            "buttons": [
               {
-                'type': 'postback',
-                'title': 'Yes!',
-                'payload': 'yes',
+                "type": "postback",
+                "title": "Sí",
+                "payload": "yes",
               },
               {
-                'type': 'postback',
-                'title': 'No!',
-                'payload': 'no',
+                "type": "postback",
+                "title": "No",
+                "payload": "no",
               }
             ],
           }]
@@ -138,6 +136,30 @@ function handleMessage(sender_psid, received_message) {
   callSendAPI(sender_psid, response);
 }
 
+// Handles messaging_postbacks events (NECESARIO AÑADIR)
+function handlePostback(sender_psid, received_postback) {
+  let response;
+  const payload = received_postback.payload;
+
+  switch(payload) {
+    case 'see_products':
+      response = {"text": "Aquí tienes nuestro catálogo: https://ejemplo.com/productos"};
+      break;
+    case 'about_us':
+      response = {"text": "Somos una empresa dedicada a... Visita: https://ejemplo.com/nosotros"};
+      break;
+    case 'yes':
+      response = {"text": "¡Genial! ¿En qué más puedo ayudarte?"};
+      break;
+    case 'no':
+      response = {"text": "Lamento eso. ¿Podrías enviar otra imagen?"};
+      break;
+    default:
+      response = {"text": "Lo siento, no reconozco esa acción"};
+  }
+
+  callSendAPI(sender_psid, response);
+}
 // Handles messaging_postbacks events
 function handlePostback(sender_psid, received_postback) {
 let response;
